@@ -2,3 +2,7 @@
 =====
 
 JavaScript inheritance module
+
+```
+$ npm install blood
+```
