@@ -1,4 +1,4 @@
-blood
+[blood](https://github.com/ryanve/blood)
 =====
 
-JavaScript inheritance methods
+JavaScript inheritance module
