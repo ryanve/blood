@@ -1,0 +1,4 @@
+blood
+=====
+
+JavaScript inheritance methods
