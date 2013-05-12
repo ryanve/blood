@@ -3,11 +3,11 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.0
+ * @version     0.3.1
  */
 
-/*jshint expr:true, laxcomma:true, sub:true, supernew:true, debug:true, node:true, boss:true, evil:true, 
-  undef:true, eqnull:true, unused:true, browser:true, devel:true, jquery:true, indent:4, maxerr:100 */
+/*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
+  laxcomma:true, eqnull:true, undef:true, unused:true, browser:true, jquery:true, maxerr:100 */
 
 (function(root, name, make) {
     typeof module != 'undefined' && module['exports'] ? module['exports'] = make() : root[name] = make();
@@ -299,9 +299,15 @@
         }, {});
     }
     
+    /**
+     * like underscorejs.org/#zip
+     * @return {Array}
+     */
     function zip() {
-        var r = [], args = arguments, i = 0, hasIndex = function(v) { return i in v; };
-        while (some(args, hasIndex)) r.push(pluck(args, i++));
+        var r = [], i = 0, args = arguments, inRange = function(v) {
+            return i in v || (0 < v.length && i < v.length); 
+        };
+        while (some(args, inRange)) r.push(pluck(args, i++));
         return r;
     }
     
