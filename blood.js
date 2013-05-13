@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.1
+ * @version     0.3.2
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -62,48 +62,39 @@
             return list;
         }
         
-      , getPro = Object.getPrototypeOf || function(ob) {
-            return void 0 !== ob['__proto__'] ? ob['__proto__'] : (ob.constructor || Object).prototype; 
-        }
-
-      , setPro = function(ob, pro) {
-            // experimental
-            ob['__proto__'] = pro;
+        /**
+         * @param {Object} ob
+         * @param {*=}     value
+         * @param {Array=} list
+         */
+      , revalue = function(ob, value, list) {
+            var i;
+            if (list) {
+                for (i = list.length; i--;) {
+                    list[i] in ob && (ob[list[i]] = value);
+                }
+            } else for (i in ob) {
+                ob[i] = value; // All enumerables.
+            }
             return ob;
         }
         
       , nativeCreate = (function(oCreate) {
             try {
-                // Object.create(null) should inherit no properties.
+                // Object.create(null) should inherit NO properties.
                 // Object.create(func) should inherit from Function.
                 if (!oCreate(null)['valueOf'] && oCreate.call === oCreate(oCreate).call)
                     return oCreate; // Return reference if implementation seems proper.
             } catch (e) {}
         }(Object.create))
 
-      , create = nativeCreate || (function(dontEnums) {
-            
-            // Fallback adapted from the ES5 shim (github.com/kriskowal/es5-shim/pull/132)
-            // {'__proto__': null} should inherit NO props. IE8- wrongly inherits Object.prototype.
-            var hasNullBug = !!{'__proto__': null}['valueOf']
-              , emptyProto = hasNullBug && (function(document) {
-                    var emptyProto, parentNode, iframe;
-                    parentNode = document.body || document.documentElement;
-                    iframe = document.createElement('iframe');
-                    iframe['style']['display'] = 'none';
-                    parentNode.appendChild(iframe);
-                    iframe['src'] = 'javascript:';
-                    emptyProto = iframe.contentWindow.Object.prototype;
-                    parentNode.removeChild(iframe);
-                    iframe = null;
-                    return (function(ob, list) {
-                        var i = list.length;
-                        while (i--) if (list[i] in ob) delete ob[list[i]];
-                        return ob;
-                    }(emptyProto, dontEnums));
-                }(document));
+      , create = nativeCreate || (function(emptyProto) {
 
             /**
+             * Object.create fallback. Adapted from the ES5-shim.
+             * @link   github.com/kriskowal/es5-shim/pull/132
+             * @link   github.com/kriskowal/es5-shim/issues/150
+             * @link   github.com/kriskowal/es5-shim/pull/118
              * @param  {Object|Array|Function|null}  parent
              * @return {Object}
              */
@@ -111,13 +102,32 @@
                 function F() {}
                 var instance;
                 null === parent ? (
-                    hasNullBug ? F.prototype = emptyProto : instance = {'__proto__': null}
+                    emptyProto ? F.prototype = emptyProto : instance = {'__proto__':null}
                 ) : F.prototype = parent;
                 instance = instance || new F; // inherits F.prototype
                 instance['__proto__'] = parent; // help getPrototypeOf work in IE8-
                 return instance;
             };
-        }(dontEnums));
+
+          }(function(empty, dontEnums) {
+            // `empty` should inherit NO props. IE8- incorrectly inherits `Object.prototype`
+            // Make an object with those props overrided to `undefined` to use as a parent.
+            // github.com/kriskowal/es5-shim/issues/150#issuecomment-17783695
+            for (var i = dontEnums.length; i--;) {
+                if (dontEnums[i] in empty) empty[dontEnums[i]] = void 0;
+                else return; // Works correctly. Fix not needed.
+            }
+            return empty;
+        }({'__proto__':null}, dontEnums)))
+
+      , getPro = Object.getPrototypeOf || function(ob) {
+            return void 0 !== ob['__proto__'] ? ob['__proto__'] : (ob.constructor || Object).prototype; 
+        }
+
+      , setPro = function(ob, pro) {
+            ob['__proto__'] = pro; // experimental
+            return ob;
+        };
 
     /**
      * @param  {Object|Array|Function}          receiver
@@ -393,6 +403,7 @@
       , 'any': any
       , 'assign': assign
       , 'create': create
+      , 'every': every
       , 'has': has
       , 'include': include
       , 'inject': inject
@@ -403,13 +414,16 @@
       , 'methods': methods
       , 'object': combine
       , 'orphan': orphan
+      , 'omit': omit
       , 'owns': owns
       , 'pairs': pairs
+      , 'pick': pick
       , 'pluck': pluck
       , 'reduce': reduce
       , 'twin': twin
       , 'types': types
       , 'same': same
+      , 'some': some
       , 'size': size
       , 'values': values
       , 'zip': zip
