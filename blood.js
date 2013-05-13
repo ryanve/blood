@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.2
+ * @version     0.3.3
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -60,6 +60,13 @@
                 has(ob, k = others[i]) && !~indexOf.call(list, k) && list.push(k);
             }
             return list;
+        }
+
+      , props = !hasEnumBug && Object.getOwnPropertyNames || function(ob) {
+            var props = keys(ob);
+            // Include 'length' if owned and non-enumerable (such as for native arrays)
+            owns.call(ob, 'length') && !~indexOf.call(props, 'length') && props.push('length');
+            return props;
         }
         
         /**
@@ -180,7 +187,7 @@
         var n = arguments.length;
         source = n ? source : this;
         parent = 2 == n ? parent : getPro(source);
-        return assign(create(parent), source);
+        return adopt(create(parent), source, props(source));
     }
     
     // Use .every/.some/.reduce for array-likes.
@@ -419,6 +426,7 @@
       , 'pairs': pairs
       , 'pick': pick
       , 'pluck': pluck
+      , 'props': props
       , 'reduce': reduce
       , 'twin': twin
       , 'types': types
