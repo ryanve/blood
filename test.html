@@ -32,7 +32,41 @@
     (function(root) {
         var aok = root.aok
           , blood = root.blood;
+        
+        function testList(method, subject) {
+            var arr = method(subject), msg = ' (length: ' + arr.length  + ')';
+            this.fail += msg;
+            this.pass += msg;
+            return arr.length;
+        }
 
+        aok.prototype.express = aok.info;
+        aok({
+            id: 'arrProps'
+          , test: function() {
+                var arr = blood.props([]);
+                this.remark = 'length: ' + arr.length;
+                return arr.length;
+            }
+        });
+        aok({
+            id: 'objProps'
+          , test: function() {
+                var arr = blood.props({'length':1}), msg = ' (length: ' + arr.length  + ')';
+                this.fail += msg;
+                this.pass += msg;
+                return arr.length;
+            }
+        });
+        aok({
+            id: 'funProps'
+          , test: function() {
+                var arr = blood.props(isFinite), msg = ' (length: ' + arr.length  + ')';
+                this.fail += msg;
+                this.pass += msg;
+                return arr.length;
+            }
+        });
     }(this));
 </script>
 </body>

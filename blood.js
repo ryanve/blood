@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.3
+ * @version     0.3.4
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -16,6 +16,7 @@
     var AP = Array.prototype
       , OP = Object.prototype
       , owns = OP['hasOwnProperty']
+      , loops = OP['propertyIsEnumerable']
       , push = AP['push']
       , slice = AP['slice']
       , concat = AP['concat']
@@ -31,7 +32,7 @@
         
         // stackoverflow.com/a/3705407/770127
         // developer.mozilla.org/en-US/docs/ECMAScript_DontEnum_attribute
-      , hasEnumBug = !{'valueOf': 1}['propertyIsEnumerable']('valueOf') // IE8-
+      , hasEnumBug = !loops.call({'valueOf':1}, 'valueOf') // IE8-
       , dontEnums = [
             'constructor'
           , 'propertyIsEnumerable'
@@ -63,9 +64,10 @@
         }
 
       , props = !hasEnumBug && Object.getOwnPropertyNames || function(ob) {
+            // getOwnPropertyNames cannot be emulated exactly. Get as close as possible.
+            // Include 'length' if owned and non-enumerable, such as for native arrays.
             var props = keys(ob);
-            // Include 'length' if owned and non-enumerable (such as for native arrays)
-            owns.call(ob, 'length') && !~indexOf.call(props, 'length') && props.push('length');
+            has(ob, 'length') && !loops.call(ob, 'length') && props.push('length');
             return props;
         }
         
@@ -417,6 +419,7 @@
       , 'invert': invert
       , 'keys': keys
       , 'line': line
+      , 'loops': loops
       , 'map': map
       , 'methods': methods
       , 'object': combine
