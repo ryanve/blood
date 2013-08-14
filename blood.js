@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.3.4
+ * @version     0.4.0
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -266,6 +266,42 @@
     }
     
     /**
+     * @param  {Object|Function|Array} ob
+     * @return {Array}
+     */
+    function tree(ob) {
+        var chain = [ob];
+        while (null != (ob = getPro(ob))) chain.push(ob);
+        return chain;
+    }
+    
+    /**
+     * @param  {Object|Function|Array} ob
+     * @return {Array}
+     */
+    function roots(ob) {
+        return tree(ob).slice(1);
+    }
+
+    /**
+     * @param  {Array|Object} list
+     * @param  {*=}           value
+     * @return {Array|Object}
+     */
+    function admit(list, value) {
+        ~indexOf.call(list, value) || push.call(list, value);
+        return list;
+    }
+    
+    /**
+     * @param  {Array|Object} list
+     * @return {Array}
+     */
+    function uniq(list) {
+        return reduce(list, admit, []);
+    }
+
+    /**
      * @param  {*}  ob
      * @return {number}
      */
@@ -431,11 +467,14 @@
       , 'pluck': pluck
       , 'props': props
       , 'reduce': reduce
+      , 'roots': roots
+      , 'tree': tree
       , 'twin': twin
       , 'types': types
       , 'same': same
       , 'some': some
       , 'size': size
+      , 'uniq': uniq
       , 'values': values
       , 'zip': zip
     };

@@ -1,7 +1,7 @@
 {
     "name": "blood",
     "description": "inheritance utility module",
-    "version": "0.3.4",
+    "version": "0.4.0",
     "homepage": "https://github.com/ryanve/blood",
     "author": "Ryan Van Etten <@ryanve>",
     "keywords": ["inheritance", "oop", "util", "object", "ender"],

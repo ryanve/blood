@@ -31,7 +31,8 @@
 <script>
     (function(root) {
         var aok = root.aok
-          , blood = root.blood;
+          , blood = root.blood
+          , OP = Object.prototype;
         
         function testList(method, subject) {
             var arr = method(subject), msg = ' (length: ' + arr.length  + ')';
@@ -65,6 +66,16 @@
                 this.fail += msg;
                 this.pass += msg;
                 return arr.length;
+            }
+        });
+        aok({
+            id: 'tree'
+          , test: function() {
+                var r, a = {id:'a'}, b = blood.create(a), c = blood.create(b);
+                b.id = 'b';
+                c.id = 'c';
+                r = blood.tree(c);
+                return 4 === r.length && c === r[0] && b === r[1] && a === r[2] && OP === r[3];
             }
         });
     }(this));
