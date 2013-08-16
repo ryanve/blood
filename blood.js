@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.4.0
+ * @version     0.4.1
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -408,18 +408,31 @@
         }, {}, concat.apply(AP, slice.call(arguments, 1)));
     }
     
+    /**
+     * @param  {*}        ob
+     * @param  {Function} fn
+     * @param  {*=}       scope
+     * @return {Array}
+     */
     function map(ob, fn, scope) {
-        return (typeof ob != 'function' && ob.length === +ob.length ? reduce : inject)(ob, function(r, v, k, ob) {
-            return r[k] = fn.call(scope, v, k, ob), r;
-        }, []);
+        var r = [];
+        (typeof ob != 'function' && ob.length === +ob.length ? some : any)(ob, function(v, k, ob) {
+            r[k] = fn.call(scope, v, k, ob);
+        });
+        return r;
     }
-    
+
+    /**
+     * @param  {*}             ob
+     * @param  {string|number} key
+     * @return {Array}
+     */
     function pluck(ob, key) {
         return map(ob, function(v) {
             return v[key];
         });
     }
-    
+
     /**
      * @param  {Object|Array} ob
      * @param  {*}            needle
