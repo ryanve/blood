@@ -22,11 +22,8 @@
       , concat = AP['concat']
       , indexOf = AP['indexOf'] || function(needle, i) {
             var l = this.length;
-            i >>= 0; // toInteger
-            for (i = 0 > i ? l + i : i; i < l; i++) {
-                if (i in this && this[i] === needle)
-                    return i;
-            }
+            for (i = 0 > (i >>= 0) ? l + i : i; i < l; i++)
+                if (i in this && this[i] === needle) return i;
             return -1;
         }
         
@@ -54,12 +51,10 @@
 
       , keys = !hasEnumBug && Object.keys || function(ob) {
             var k, i, list = [], others = dontEnums;
-            for (k in ob) {
+            for (k in ob)
                 has(ob, k) && '__proto__' !== k && list.push(k);
-            }
-            for (i = others.length; i--;) {
+            for (i = others.length; i--;)
                 has(ob, k = others[i]) && !~indexOf.call(list, k) && list.push(k);
-            }
             return list;
         }
 
@@ -78,13 +73,8 @@
          */
       , revalue = function(ob, value, list) {
             var i;
-            if (list) {
-                for (i = list.length; i--;) {
-                    list[i] in ob && (ob[list[i]] = value);
-                }
-            } else for (i in ob) {
-                ob[i] = value; // All enumerables.
-            }
+            if (list) for (i = list.length; i--;) list[i] in ob && (ob[list[i]] = value);
+            else for (i in ob) ob[i] = value; // All enumerables.
             return ob;
         }
         
@@ -160,7 +150,7 @@
      * @param  {Object|Array|Function} supplier
      */
     function assign(receiver, supplier) {
-        // Functionally like the ES6 Object.assign expectation, plus single-`param syntax
+        // Functionally like the ES6 Object.assign expectation, plus single-param syntax
         1 === arguments.length && (supplier = receiver, receiver = this);
         return adopt(receiver, supplier, keys(supplier));
     }
