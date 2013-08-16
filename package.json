@@ -1,10 +1,10 @@
 {
     "name": "blood",
-    "description": "inheritance utility module",
+    "description": "object inheritance and iteration utilities",
     "version": "0.4.1",
     "homepage": "https://github.com/ryanve/blood",
     "author": "Ryan Van Etten <@ryanve>",
-    "keywords": ["inheritance", "oop", "util", "object", "ender"],
+    "keywords": ["functional", "util", "object", "inheritance", "iteration", "ender"],
     "main": "./blood.js",
     "ender": "noop",
     "repository": {
