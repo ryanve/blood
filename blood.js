@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.4.1
+ * @version     0.5.0
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -182,8 +182,8 @@
         return adopt(create(parent), source, props(source));
     }
     
-    // Use .every/.some/.reduce for array-likes.
-    // Use .all/.any/.inject for NON-array-likes.
+    // Use .every/.some/.reduce/.map for array-likes.
+    // Use .all/.any/.inject/.collect for NON-array-likes.
 
     /**
      * @param  {Object|Function} ob
@@ -406,10 +406,22 @@
      */
     function map(ob, fn, scope) {
         var r = [];
-        (typeof ob != 'function' && ob.length === +ob.length ? some : any)(ob, function(v, k, ob) {
+        return some(ob, function(v, k, ob) {
             r[k] = fn.call(scope, v, k, ob);
-        });
-        return r;
+        }), r;
+    }
+    
+    /**
+     * @param  {*}        ob
+     * @param  {Function} fn
+     * @param  {*=}       scope
+     * @return {Array}
+     */
+    function collect(ob, fn, scope) {
+        var r = [];
+        return any(ob, function(v, k, ob) {
+            r[k] = fn.call(scope, v, k, ob);
+        }), r;
     }
 
     /**
@@ -418,9 +430,10 @@
      * @return {Array}
      */
     function pluck(ob, key) {
-        return map(ob, function(v) {
-            return v[key];
-        });
+        var r = [];
+        return some(ob, function(v, k) {
+            r[k] = v[key];
+        }), r;
     }
 
     /**
@@ -451,6 +464,7 @@
       , 'any': any
       , 'assign': assign
       , 'create': create
+      , 'collect': collect
       , 'every': every
       , 'has': has
       , 'include': include

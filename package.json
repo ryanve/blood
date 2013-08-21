@@ -1,7 +1,7 @@
 {
     "name": "blood",
     "description": "object inheritance and iteration utilities",
-    "version": "0.4.1",
+    "version": "0.5.0",
     "homepage": "https://github.com/ryanve/blood",
     "author": "Ryan Van Etten <@ryanve>",
     "keywords": ["functional", "util", "object", "inheritance", "iteration", "ender"],

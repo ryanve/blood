@@ -60,8 +60,7 @@
             }
         });
         aok({
-            id: 'funProps'
-          , test: function() {
+            id: 'funProps', test: function() {
                 var arr = blood.props(isFinite), msg = ' (length: ' + arr.length  + ')';
                 this.fail += msg;
                 this.pass += msg;
@@ -76,6 +75,31 @@
                 c.id = 'c';
                 r = blood.tree(c);
                 return 4 === r.length && c === r[0] && b === r[1] && a === r[2] && OP === r[3];
+            }
+        });
+        aok({
+            id: 'map'
+          , test: function() {
+                var list = [0, 1, 2, 3, 4];
+                return '11111' === blood.map(list, function(n, i, o) {
+                    return this === list && o === list && n == i ? 1 : 0;
+                }, list).join('');
+            }
+        });
+        aok({
+            id: 'collect'
+          , test: function() {
+                var list = {0:0, 1:1, 2:2, 3:3, 4:4};
+                return '11111' === blood.collect(list, function(n, i, o) {
+                    return this === list && o === list && n == i ? 1 : 0;
+                }, list).join('');
+            }
+        });
+        aok({
+            id: 'pluck'
+          , test: function() {
+                var list = [{a:0, b:1}, {a:2, b:3}, {a:4, b:5}];
+                return '135' === blood.pluck(list, 'b').join('');
             }
         });
     }(this));
