@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.5.0
+ * @version     0.5.1
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -375,27 +375,25 @@
     function methods(ob) {
         return types(ob, 'function');
     }
-    
+
     /**
      * @param  {Object|Array|Function} source
      * @return {Object}
      */
     function pick(source) {
-        return reduce(concat.apply(AP, slice.call(arguments, 1)), function(r, n) {
-            n in source && (r[n] = source[n]);
-            return r;
-        }, {});
+        for (var r = {}, list = concat.apply(AP, slice.call(arguments, 1)), l = list.length, i = 0; i < l; i++)
+            if (list[i] in source) r[list[i]] = source[list[i]];
+        return r;
     }
-    
+
     /**
      * @param  {Object|Array|Function} source
      * @return {Object}
      */
     function omit(source) {
-        return inject(source, function(r, n) {
-            ~indexOf.call(this, n) || (r[n] = source[n]);
-            return r;
-        }, {}, concat.apply(AP, slice.call(arguments, 1)));
+        var k, r = {}, list = concat.apply(AP, slice.call(arguments, 1));
+        for (k in source) ~indexOf.call(list, k) || (r[k] = source[k]);
+        return r;
     }
     
     /**
