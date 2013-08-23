@@ -43,6 +43,13 @@
 
         aok.prototype.express = aok.info;
         aok({
+            id: 'create'
+          , test: blood.every([null, {a:1}], function(parent) {
+                var child = blood.create(parent);
+                return !!child && !blood.keys(child).length && blood.line(child) === parent;
+            })
+        });
+        aok({
             id: 'arrProps'
           , test: function() {
                 var arr = blood.props([]);

@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.5.1
+ * @version     0.5.2
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -88,7 +88,6 @@
         }(Object.create))
 
       , create = nativeCreate || (function(emptyProto) {
-
             /**
              * Object.create fallback. Adapted from the ES5-shim.
              * @link   github.com/kriskowal/es5-shim/pull/132
@@ -99,25 +98,12 @@
              */
             return function(parent) {
                 function F() {}
-                var instance;
-                null === parent ? (
-                    emptyProto ? F.prototype = emptyProto : instance = {'__proto__':null}
-                ) : F.prototype = parent;
-                instance = instance || new F; // inherits F.prototype
-                instance['__proto__'] = parent; // help getPrototypeOf work in IE8-
+                F.prototype = null === parent ? emptyProto : parent;
+                var instance = new F; // inherits F.prototype
+                null === parent || (instance['__proto__'] = parent); // hack getPrototypeOf in IE8-
                 return instance;
             };
-
-          }(function(empty, dontEnums) {
-            // `empty` should inherit NO props. IE8- incorrectly inherits `Object.prototype`
-            // Make an object with those props overrided to `undefined` to use as a parent.
-            // github.com/kriskowal/es5-shim/issues/150#issuecomment-17783695
-            for (var i = dontEnums.length; i--;) {
-                if (dontEnums[i] in empty) empty[dontEnums[i]] = void 0;
-                else return; // Works correctly. Fix not needed.
-            }
-            return empty;
-        }({'__proto__':null}, dontEnums)))
+          }(combine(['__proto__'].concat(dontEnums), [null])))
 
       , getPro = Object.getPrototypeOf || function(ob) {
             return void 0 !== ob['__proto__'] ? ob['__proto__'] : (ob.constructor || Object).prototype; 
