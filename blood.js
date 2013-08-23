@@ -73,18 +73,6 @@
             return props;
         }
         
-        /**
-         * @param {Object} ob
-         * @param {*=}     value
-         * @param {Array=} list
-         */
-      , revalue = function(ob, value, list) {
-            var i;
-            if (list) for (i = list.length; i--;) list[i] in ob && (ob[list[i]] = value);
-            else for (i in ob) ob[i] = value; // All enumerables.
-            return ob;
-        }
-        
       , nativeCreate = (function(oCreate) {
             try {
                 // Object.create(null) should inherit NO properties.
