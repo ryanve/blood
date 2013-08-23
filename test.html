@@ -43,6 +43,10 @@
 
         aok.prototype.express = aok.info;
         aok({
+            id: 'keys'
+          , test: 'a' === blood.keys({a:1}).pop() && 0 === blood.keys(OP).length
+        });
+        aok({
             id: 'create'
           , test: blood.every([null, {a:1}], function(parent) {
                 var child = blood.create(parent);

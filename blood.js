@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.5.2
+ * @version     0.5.3
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -15,7 +15,7 @@
 
     var AP = Array.prototype
       , OP = Object.prototype
-      , owns = OP['hasOwnProperty']
+      , hasOwn = OP['hasOwnProperty']
       , loops = OP['propertyIsEnumerable']
       , push = AP['push']
       , slice = AP['slice']
@@ -39,6 +39,12 @@
           , 'isProtoypeOf'
           , 'hasOwnProperty'
         ]
+      
+      , proto = '__proto__'
+      , supportsProto = proto in OP
+      , owns = supportsProto ? hasOwn : function(key) {
+            return proto === key ? this === OP : hasOwn.call(this, key);
+        }
         
         /**
          * @param  {*}             ob
@@ -50,11 +56,12 @@
         }
 
       , keys = !hasEnumBug && Object.keys || function(ob) {
-            var k, i, list = [], others = dontEnums;
+            var k, i = 0, list = [], others = dontEnums;
             for (k in ob)
-                has(ob, k) && '__proto__' !== k && list.push(k);
-            for (i = others.length; i--;)
-                has(ob, k = others[i]) && !~indexOf.call(list, k) && list.push(k);
+                has(ob, k) && (list[i++] = k);
+            if (ob !== OP)
+                for (i = others.length; i--;)
+                    has(ob, k = others[i]) && admit(list, k);
             return list;
         }
 
@@ -89,7 +96,6 @@
 
       , create = nativeCreate || (function(emptyProto) {
             /**
-             * Object.create fallback. Adapted from the ES5-shim.
              * @link   github.com/kriskowal/es5-shim/pull/132
              * @link   github.com/kriskowal/es5-shim/issues/150
              * @link   github.com/kriskowal/es5-shim/pull/118
@@ -100,17 +106,17 @@
                 function F() {}
                 F.prototype = null === parent ? emptyProto : parent;
                 var instance = new F; // inherits F.prototype
-                null === parent || (instance['__proto__'] = parent); // hack getPrototypeOf in IE8-
+                null === parent || (instance[proto] = parent); // hack getPrototypeOf in IE8-
                 return instance;
             };
-          }(combine(['__proto__'].concat(dontEnums), [null])))
+        }(combine([proto].concat(dontEnums), [null])))
 
       , getPro = Object.getPrototypeOf || function(ob) {
-            return void 0 !== ob['__proto__'] ? ob['__proto__'] : (ob.constructor || Object).prototype; 
+            return void 0 !== ob[proto] ? ob[proto] : (ob.constructor || Object).prototype; 
         }
 
       , setPro = function(ob, pro) {
-            ob['__proto__'] = pro; // experimental
+            ob[proto] = pro; // experimental
             return ob;
         };
 
