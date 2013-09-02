@@ -40,6 +40,7 @@ Common methods below are generally compatible with those in [underscore](http://
 
 - `blood.every(object, fn, scope?)` // uses array-like iteration
 - `blood.some(object, fn, scope?)` // uses array-like iteration
+- `blood.map(object, fn, scope?)` // uses array-like iteration
 - `blood.all(object, fn, scope?)` // iterates *owned* properties
 - `blood.any(object, fn, scope?)` // iterates *owned* properties
-- `blood.map(object, fn, scope?)` // discerns iteration type
+- `blood.collect(object, fn, scope?)` // iterates *owned* properties
