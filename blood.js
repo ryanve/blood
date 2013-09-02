@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.5.4
+ * @version     0.5.5
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -318,12 +318,9 @@
      * @return {Object}
      */
     function invert(ob) {
-        // return combine(values(ob), keys(ob));
-        return inject(ob, function(r, v, k) {
-            r[v] = k;
-        }, {});
+        return combine(values(ob), keys(ob));
     }
-    
+
     /**
      * @param  {number}       max
      * @param  {Array|Object} o
