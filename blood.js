@@ -3,7 +3,7 @@
  * @link        github.com/ryanve/blood
  * @license     MIT
  * @copyright   2013 Ryan Van Etten
- * @version     0.5.3
+ * @version     0.5.4
  */
 
 /*jshint expr:true, sub:true, supernew:true, debug:true, node:true, boss:true, devel:true, evil:true, 
@@ -325,17 +325,24 @@
     }
     
     /**
+     * @param  {number}       max
+     * @param  {Array|Object} o
+     * @return {number}
+     */
+    function longer(max, o) {
+        return (o = o.length >> 0) > max ? o : max;
+    }
+    
+    /**
      * like underscorejs.org/#zip
      * @return {Array}
      */
     function zip() {
-        var r = [], i = 0, args = arguments, inRange = function(v) {
-            return i in v || (0 < v.length && i < v.length); 
-        };
-        while (some(args, inRange)) r.push(pluck(args, i++));
+        var r = [], i = reduce(arguments, longer, 0);
+        while (i--) r[i] = pluck(arguments, i);
         return r;
     }
-    
+
     /**
      * @param  {Object|Array|Function} ob
      * @param  {string|Array}          type
