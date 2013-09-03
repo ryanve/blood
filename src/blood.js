@@ -1,9 +1,3 @@
-/*!
- * blood 0.6.0+201309031919
- * https://github.com/ryanve/blood
- * MIT License 2013 Ryan Van Etten
- */
-
 (function(root, name, make) {
     typeof module != 'undefined' && module['exports'] ? module['exports'] = make() : root[name] = make();
 }(this, 'blood', function() {
