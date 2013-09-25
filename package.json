@@ -3,6 +3,7 @@
     "description": "object inheritance and iteration utilities",
     "version": "0.6.0",
     "homepage": "https://github.com/ryanve/blood",
+    "license": "MIT",
     "author": "Ryan Van Etten",
     "keywords": ["functional", "util", "object", "inheritance", "iteration", "ender"],
     "main": "./blood.js",
