@@ -82,4 +82,20 @@
             return '135' === blood.pluck(list, 'b').join('');
         }
     });
+    aok({
+        id: 'pick'
+      , test: function() {
+            return blood.every([['b', 'a'], ['a'], [['a']]], function(arr) {
+                return blood.pick.apply(blood, arr.unshift(this) && arr).hasOwnProperty('a');
+            }, {a:1, b:1, c:1});
+        }
+    });
+    aok({
+        id: 'omit'
+      , test: function() {
+            return blood.every([['b', 'a'], ['a'], [['a']]], function(arr) {
+                return !blood.omit.apply(blood, arr.unshift(this) && arr).hasOwnProperty('a');
+            }, {a:1, b:1, c:1});
+        }
+    });
 }(this));
