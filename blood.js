@@ -1,5 +1,5 @@
 /*!
- * blood 0.6.0+201309031919
+ * blood 0.6.0+201310050323
  * https://github.com/ryanve/blood
  * MIT License 2013 Ryan Van Etten
  */
@@ -42,8 +42,8 @@
         }
         
         /**
-         * @param  {*}             ob
-         * @param  {string|number} key
+         * @param {*} ob
+         * @param {string|number} key
          * @return {boolean}
          */
       , has = function(ob, key) {
@@ -79,10 +79,10 @@
 
       , create = nativeCreate || (function(emptyProto) {
             /**
-             * @link   github.com/kriskowal/es5-shim/pull/132
-             * @link   github.com/kriskowal/es5-shim/issues/150
-             * @link   github.com/kriskowal/es5-shim/pull/118
-             * @param  {Object|Array|Function|null}  parent
+             * @link http://github.com/kriskowal/es5-shim/pull/132
+             * @link http://github.com/kriskowal/es5-shim/issues/150
+             * @link http://github.com/kriskowal/es5-shim/pull/118
+             * @param {Object|Array|Function|null}  parent
              * @return {Object}
              */
             return function(parent) {
@@ -104,25 +104,24 @@
         };
 
     /**
-     * @param  {Object|Array|Function}          receiver
-     * @param  {(Object|Array|Function)=}       supplier
-     * @param  {(Array|string|number|boolean)=} list
+     * @param {Object|Array|Function} receiver
+     * @param {(Object|Array|Function)=} supplier
+     * @param {(Array|string|number|boolean)=} list
      */
     function adopt(receiver, supplier, list) {
         var i = arguments.length, force = null != (false === list ? list = null : list);
         1 === i && (supplier = receiver, receiver = this);
         list = force && true !== list ? (typeof list != 'object' ? [list] : list) : keys(supplier);
         i = list.length;
-        for (i = 0 < i && i; i--;) {
+        for (i = 0 < i && i; i--;)
             if (force || !has(receiver, list[i]))
                 receiver[list[i]] = supplier[list[i]];
-        }
         return receiver;
     }
 
     /**
-     * @param  {Object|Array|Function} receiver
-     * @param  {Object|Array|Function} supplier
+     * @param {Object|Array|Function} receiver
+     * @param {Object|Array|Function} supplier
      */
     function assign(receiver, supplier) {
         // Functionally like the ES6 Object.assign expectation, plus single-param syntax
@@ -131,15 +130,15 @@
     }
     
     /**
-     * @param  {Object|Array|Function} ob
-     * @param  {Object|null}           pro
+     * @param {Object|Array|Function} ob
+     * @param {Object|null} pro
      */
     function line(ob, pro) {
         return 2 == arguments.length ? setPro(ob, pro) : getPro(ob);
     }
 
     /**
-     * @param  {Object}  source
+     * @param {Object} source
      * @return {Object}
      */
     function orphan(source) {
@@ -147,8 +146,8 @@
     }
 
     /**
-     * @param  {Object|Array|Function|null} source
-     * @param  {(Object|null)=}             parent
+     * @param {Object|Array|Function|null} source
+     * @param {(Object|null)=} parent
      */
     function twin(source, parent) {
         var n = arguments.length;
@@ -156,14 +155,11 @@
         parent = 2 == n ? parent : getPro(source);
         return adopt(create(parent), source, props(source));
     }
-    
-    // Use .every/.some/.reduce/.map for array-likes.
-    // Use .all/.any/.inject/.collect for NON-array-likes.
 
     /**
-     * @param  {Object|Function} ob
-     * @param  {Function=}       fn
-     * @param  {*=}              scope
+     * @param {Object|Function} ob
+     * @param {Function=} fn
+     * @param {*=} scope
      */
     function all(ob, fn, scope) {
         var list = keys(ob), l = list.length, i = 0;
@@ -172,9 +168,9 @@
     }
     
     /**
-     * @param  {Object|Function} ob
-     * @param  {Function=}       fn
-     * @param  {*=}              scope
+     * @param {Object|Function} ob
+     * @param {Function=} fn
+     * @param {*=} scope
      */
     function any(ob, fn, scope) {
         var list = keys(ob), l = list.length, i = 0;
@@ -183,45 +179,45 @@
     }
     
     /**
-     * @param  {Object|Array} ob
-     * @param  {Function=}    fn
-     * @param  {*=}           scope
+     * @param {Object|Array} stack
+     * @param {Function=} fn
+     * @param {*=} scope
      */
-    function every(ob, fn, scope) {
-        var l = ob.length, i = 0;
-        while (i < l) if (!fn.call(scope, ob[i], i++, ob)) return false;
+    function every(stack, fn, scope) {
+        var l = stack.length, i = 0;
+        while (i < l) if (!fn.call(scope, stack[i], i++, stack)) return false;
         return true;
     }
     
     /**
-     * @param  {Object|Array} ob
-     * @param  {Function=}    fn
-     * @param  {*=}           scope
+     * @param {Object|Array} stack
+     * @param {Function=} fn
+     * @param {*=} scope
      */
-    function some(ob, fn, scope) {
-        var l = ob.length, i = 0;
-        while (i < l) if (fn.call(scope, ob[i], i++, ob)) return true;
+    function some(stack, fn, scope) {
+        var l = stack.length, i = 0;
+        while (i < l) if (fn.call(scope, stack[i], i++, stack)) return true;
         return false;
     }
     
     /**
-     * @param  {Object|Array|Arguments} ob
-     * @param  {Function}               accum
-     * @param  {*=}                     value
-     * @param  {*=}                     scope
+     * @param {Object|Array|Arguments} stack
+     * @param {Function} accum
+     * @param {*=} value
+     * @param {*=} scope
      */
-    function reduce(ob, accum, value, scope) {
-        var i = 0, l = ob.length;
-        value = 3 > arguments.length ? ob[i++] : value;
-        while (i < l) value = accum.call(scope, value, ob[i], i++, ob);
+    function reduce(stack, accum, value, scope) {
+        var i = 0, l = stack.length;
+        value = 3 > arguments.length ? stack[i++] : value;
+        while (i < l) value = accum.call(scope, value, stack[i], i++, stack);
         return value;
     }
     
     /**
-     * @param  {Object|Function}        ob
-     * @param  {Function}               accum
-     * @param  {*=}                     value
-     * @param  {*=}                     scope
+     * @param {Object|Function} ob
+     * @param {Function} accum
+     * @param {*=} value
+     * @param {*=} scope
      */
     function inject(ob, accum, value, scope) {
         var list = keys(ob), i = 0, l = list.length;
@@ -231,7 +227,7 @@
     }
     
     /**
-     * @param  {Object|Function|Array} ob
+     * @param {Object|Function|Array} ob
      * @return {Array}
      */
     function tree(ob) {
@@ -241,7 +237,7 @@
     }
     
     /**
-     * @param  {Object|Function|Array} ob
+     * @param {Object|Function|Array} ob
      * @return {Array}
      */
     function roots(ob) {
@@ -249,25 +245,25 @@
     }
 
     /**
-     * @param  {Array|Object} list
-     * @param  {*=}           value
+     * @param {Array|Object} stack
+     * @param {*=} value
      * @return {Array|Object}
      */
-    function admit(list, value) {
-        ~indexOf.call(list, value) || push.call(list, value);
-        return list;
+    function admit(stack, value) {
+        ~indexOf.call(stack, value) || push.call(stack, value);
+        return stack;
     }
     
     /**
-     * @param  {Array|Object} list
+     * @param {Array|Object} stack
      * @return {Array}
      */
-    function uniq(list) {
-        return reduce(list, admit, []);
+    function uniq(stack) {
+        return reduce(stack, admit, []);
     }
 
     /**
-     * @param  {*}  ob
+     * @param {*} ob
      * @return {number}
      */
     function size(ob) {
@@ -275,7 +271,7 @@
     }
 
     /**
-     * @param  {Object|Array|Function} ob
+     * @param {Object|Array|Function} ob
      * @return {Array}
      */
     function values(ob) {
@@ -285,7 +281,7 @@
     }
     
     /**
-     * @param  {Object|Array|Function} ob
+     * @param {Object|Array|Function} ob
      * @return {Array}
      */
     function pairs(ob) {
@@ -295,9 +291,9 @@
     }
     
     /**
-     * @param  {Object|Array|Arguments} keys
-     * @param  {Object|Array|Arguments} values
-     * @param  {*=}                     target
+     * @param {Object|Array|Arguments} keys
+     * @param {Object|Array|Arguments} values
+     * @param {*=} target
      * @return {Object|*}
      */
     function combine(keys, values, target) {
@@ -309,7 +305,7 @@
     }
     
     /**
-     * @param  {Object|Array|Arguments} ob
+     * @param {Object|Array|Arguments} ob
      * @return {Object}
      */
     function invert(ob) {
@@ -317,16 +313,18 @@
     }
 
     /**
-     * @param  {number}       max
-     * @param  {Array|Object} o
+     * @param {number} max
+     * @param {Array|Object} o
      * @return {number}
      */
     function longer(max, o) {
-        return (o = o.length >> 0) > max ? o : max;
+        var i = o.length >> 0;
+        return i > max ? i : max;
     }
     
     /**
      * like underscorejs.org/#zip
+     * @param {...}
      * @return {Array}
      */
     function zip() {
@@ -336,8 +334,8 @@
     }
 
     /**
-     * @param  {Object|Array|Function} ob
-     * @param  {string|Array}          type
+     * @param {Object|Array|Function} ob
+     * @param {string|Array type
      * @return {Array}
      */
     function types(ob, type) {
@@ -348,7 +346,7 @@
     }
     
     /**
-     * @param  {Object|Array|Function} ob
+     * @param {Object|Array|Function} ob
      * @return {Array}
      */
     function methods(ob) {
@@ -356,7 +354,7 @@
     }
 
     /**
-     * @param  {Object|Array|Function} source
+     * @param {Object|Array|Function} source
      * @return {Object}
      */
     function pick(source) {
@@ -366,7 +364,7 @@
     }
 
     /**
-     * @param  {Object|Array|Function} source
+     * @param {Object|Array|Function} source
      * @return {Object}
      */
     function omit(source) {
@@ -376,22 +374,22 @@
     }
     
     /**
-     * @param  {*}        ob
-     * @param  {Function} fn
-     * @param  {*=}       scope
+     * @param {*} stack
+     * @param {Function} fn
+     * @param {*=} scope
      * @return {Array}
      */
-    function map(ob, fn, scope) {
+    function map(stack, fn, scope) {
         var r = [];
-        return some(ob, function(v, k, ob) {
-            r[k] = fn.call(scope, v, k, ob);
+        return some(stack, function(v, k, stack) {
+            r[k] = fn.call(scope, v, k, stack);
         }), r;
     }
     
     /**
-     * @param  {*}        ob
-     * @param  {Function} fn
-     * @param  {*=}       scope
+     * @param {*} ob
+     * @param {Function} fn
+     * @param {*=} scope
      * @return {Array}
      */
     function collect(ob, fn, scope) {
@@ -402,20 +400,20 @@
     }
 
     /**
-     * @param  {*}             ob
-     * @param  {string|number} key
+     * @param {*} stack
+     * @param {string|number} key
      * @return {Array}
      */
-    function pluck(ob, key) {
+    function pluck(stack, key) {
         var r = [];
-        return some(ob, function(v, k) {
+        return some(stack, function(v, k) {
             r[k] = v[key];
         }), r;
     }
 
     /**
-     * @param  {Object|Array} ob
-     * @param  {*}            needle
+     * @param {Object|Array} ob
+     * @param {*} needle
      * @return {boolean}
      */
     function include(ob, needle) {
@@ -424,15 +422,13 @@
     }
     
     /**
-     * @param  {*}  a
-     * @param  {*=} b
+     * @param {*} a
+     * @param {*=} b
      * @return {boolean}
      */
     function same(a, b) {
-        // Emulate ES6 Object.is
-        return a === b ? (
-            0 !== a || 1/a === 1/b  // Discern -0 from 0
-        ) : a !== a && b !== b;     // NaN is non-reflexive
+        // Emulate ES6 Object.is - Fixes NaN and discerns -0 from 0
+        return a === b ? (0 !== a || 1/a === 1/b) : a !== a && b !== b; 
     }
 
     return {
