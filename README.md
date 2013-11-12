@@ -5,7 +5,7 @@
 $ npm install blood
 ```
 
-## API ([0.6](../../releases))
+## API ([0.7](../../releases))
 
 - Interoperables: Methods are generally compatible with those in [underscore](http://underscorejs.org) and [lodash](http://lodash.com). Interchange libs based on needs. 
 - Parameters labelled with `?` are optional. 
@@ -16,9 +16,11 @@ $ npm install blood
 - `blood.create(parent)` uses [`Object.create`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/create) if available
 - `blood.twin(source, parent?)` [clone inheritance](http://stackoverflow.com/q/16594717/770127)
 - `blood.keys(object)` uses [`Object.keys`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/keys) if available
+- `blood.names(object)` uses [`Object.getOwnPropertyNames`](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyNames) if available
 - `blood.values(object)` get array of *owned* values
 - `blood.methods(object)` get array of *owned* functions
 - `blood.pluck(object, key)` get array of plucked values
+- `blood.object(keys, values)` get new object made from keys and values
 - `blood.pick(object, *keys)` get new object *with* `keys`
 - `blood.omit(object, *keys)` get new object *without* `keys`
 - `blood.has(object, key)` test if `object` *owns* `key`

@@ -1,5 +1,5 @@
 /*!
- * blood 0.6.1+201311120510
+ * blood 0.7.0+201311120940
  * https://github.com/ryanve/blood
  * MIT License 2013 Ryan Van Etten
  */
@@ -51,18 +51,18 @@
         }
 
       , keys = !hasEnumBug && Object.keys || function(o) {
-            var k, i = 0, list = [], others = dontEnums;
-            for (k in o) has(o, k) && (list[i++] = k);
-            if (o !== OP) for (i = others.length; i--;) has(o, k = others[i]) && admit(list, k);
-            return list;
+            var k, i = 0, r = [], others = dontEnums;
+            for (k in o) has(o, k) && (r[i++] = k);
+            if (o !== OP) for (i = others.length; i--;) has(o, k = others[i]) && admit(r, k);
+            return r;
         }
 
-      , props = !hasEnumBug && Object.getOwnPropertyNames || function(o) {
+      , names = !hasEnumBug && Object.getOwnPropertyNames || function(o) {
             // getOwnPropertyNames cannot be emulated exactly. Get as close as possible.
             // Include 'length' if owned and non-enumerable, such as for native arrays.
-            var props = keys(o);
-            has(o, 'length') && !loops.call(o, 'length') && props.push('length');
-            return props;
+            var names = keys(o);
+            has(o, 'length') && !loops.call(o, 'length') && names.push('length');
+            return names;
         }
         
       , nativeCreate = (function(oCreate) {
@@ -149,7 +149,7 @@
         var n = arguments.length;
         source = n ? source : this;
         parent = 2 == n ? parent : getPro(source);
-        return adopt(create(parent), source, props(source));
+        return adopt(create(parent), source, names(source));
     }
     
     /**
@@ -171,31 +171,37 @@
     }
     
     /**
-     * @param {{length:number}} stack
-     * @param {Function=} fn
-     * @param {*=} scope
+     * @param {Object} o source to read from
+     * @param {Function} cb callback
+     * @param {boolean=} fold
+     * @return {Function}
      */
-    function every(stack, fn, scope) {
-        var l = stack.length, i = 0;
-        while (i < l) if (!fn.call(scope, stack[i], i++, stack)) return false;
-        return true;
+    function swap(o, cb, fold) {
+        return fold ? function(memo, k) {
+            return cb.call(this, memo, o[k], k, o);
+        } : function(k) {
+            return cb.call(this, o[k], k, o);
+        };
     }
     
     /**
-     * @param {Object} o
-     * @param {Function=} fn
-     * @param {*=} scope
+     * @param {Function} fn stack iterator
+     * @param {boolean=} fold
+     * @return {Function}
      */
-    function all(o, fn, scope) {
-        var list = keys(o), l = list.length, i = 0;
-        while (i < l) if (!fn.call(scope, o[list[i]], list[i++], o)) return false;
-        return true;
+    function proxy(fn, fold) {
+        return function(o) {
+            return fn.apply(fn, map(arguments, function(v, i) {
+                return 0 === i ? keys(v) : 1 === i ? swap(o, v, fold) : v;
+            }));
+        };
     }
     
     /**
      * @param {{length:number}} stack
      * @param {Function=} fn
      * @param {*=} scope
+     * @return {boolean}
      */
     function some(stack, fn, scope) {
         var l = stack.length, i = 0;
@@ -204,14 +210,15 @@
     }
     
     /**
-     * @param {Object} o
+     * @param {{length:number}} stack
      * @param {Function=} fn
      * @param {*=} scope
+     * @return {boolean}
      */
-    function any(o, fn, scope) {
-        var list = keys(o), l = list.length, i = 0;
-        while (i < l) if (fn.call(scope, o[list[i]], list[i++], o)) return true;
-        return false;
+    function every(stack, fn, scope) {
+        var l = stack.length, i = 0;
+        while (i < l) if (!fn.call(scope, stack[i], i++, stack)) return false;
+        return true;
     }
     
     /**
@@ -228,19 +235,6 @@
     }
     
     /**
-     * @param {Object} o
-     * @param {Function} accum
-     * @param {*=} value
-     * @param {*=} scope
-     */
-    function inject(o, accum, value, scope) {
-        var list = keys(o), i = 0, l = list.length;
-        value = 3 > arguments.length ? o[list[i++]] : value;
-        while (i < l) value = accum.call(scope, value, o[list[i]], list[i++], o);
-        return value;
-    }
-    
-    /**
      * @param {{length:number}} stack
      * @param {Function} fn
      * @param {*=} scope
@@ -251,18 +245,6 @@
         while (i < l) r[i] = fn.call(scope, stack[i], i++, stack);
         return r;
     }
-    
-    /**
-     * @param {Object} o
-     * @param {Function} fn
-     * @param {*=} scope
-     * @return {Array}
-     */
-    function collect(o, fn, scope) {
-        return map(keys(o), function(k) {
-            return fn.call(scope, o[k], k, o);
-        });
-    }
 
     /**
      * @param {{length:number}} stack
@@ -270,10 +252,9 @@
      * @return {Array}
      */
     function pluck(stack, key) {
-        var r = [];
-        return some(stack, function(v, k) {
-            r[k] = v[key];
-        }), r;
+        return map(stack, function(v) {
+            return v[key];
+        });
     }
 
     /**
@@ -325,15 +306,15 @@
     /**
      * @param {{length:number}} keys
      * @param {{length:number}} values
-     * @param {*=} target
-     * @return {Object|*}
+     * @return {Object}
      */
-    function combine(keys, values, target) {
+    function combine(keys, values) {
+        var o = {};
         return some(keys, values ? function(n, i) {
-            this[n] = values[i];
+            o[n] = values[i];
         } : function(pair) {
-            this[pair[0]] = pair[1];
-        }, target = target || {}), target;
+            o[pair[0]] = pair[1];
+        }), o;
     }
 
     /**
@@ -427,15 +408,15 @@
 
     return {
         'adopt': adopt
-      , 'all': all
-      , 'any': any
+      , 'all': proxy(every)
+      , 'any': proxy(some)
       , 'assign': assign
       , 'create': create
-      , 'collect': collect
+      , 'collect': proxy(map)
       , 'every': every
       , 'has': has
       , 'include': include
-      , 'inject': inject
+      , 'inject': proxy(reduce, true)
       , 'invert': invert
       , 'keys': keys
       , 'line': line
@@ -449,7 +430,7 @@
       , 'pairs': pairs
       , 'pick': pick
       , 'pluck': pluck
-      , 'props': props
+      , 'names': names
       , 'reduce': reduce
       , 'roots': roots
       , 'tree': tree
