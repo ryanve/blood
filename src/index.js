@@ -289,7 +289,7 @@
     
     /**
      * @param {Object} o
-     * @return {Array}
+     * @return {Array} of [key, value] arrays
      */
     function pairs(o) {
         var list = keys(o), i = list.length;
@@ -298,9 +298,9 @@
     }
     
     /**
-     * @param {{length:number}} keys
-     * @param {{length:number}} values
-     * @return {Object}
+     * @param {{length:number}} keys or pairs
+     * @param {{length:number}=} values
+     * @return {Object} made by keys and values
      */
     function combine(keys, values) {
         var o = {};
@@ -313,7 +313,7 @@
 
     /**
      * @param {Object} o
-     * @return {Object}
+     * @return {Object} flipped
      */
     function invert(o) {
         return combine(values(o), keys(o));
