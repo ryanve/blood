@@ -300,15 +300,15 @@
     /**
      * @param {{length:number}} keys
      * @param {{length:number}} values
-     * @param {Object=} target
      * @return {Object}
      */
-    function combine(keys, values, target) {
+    function combine(keys, values) {
+        var o = {};
         return some(keys, values ? function(n, i) {
-            this[n] = values[i];
+            o[n] = values[i];
         } : function(pair) {
-            this[pair[0]] = pair[1];
-        }, target = target || {}), target;
+            o[pair[0]] = pair[1];
+        }), o;
     }
 
     /**
