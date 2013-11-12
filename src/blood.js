@@ -96,8 +96,8 @@
         };
 
     /**
-     * @param {Object} to receiver
-     * @param {Object=} from supplier
+     * @param {Object} to
+     * @param {Object=} from
      * @param {(Array|string|number|boolean)=} list
      */
     function adopt(to, from, list) {
@@ -110,13 +110,13 @@
     }
 
     /**
-     * @param {Object} receiver
-     * @param {Object} supplier
+     * @param {Object} to
+     * @param {Object} from
      */
-    function assign(receiver, supplier) {
+    function assign(to, from) {
         // Functionally like the ES6 Object.assign expectation, plus single-param syntax
-        1 === arguments.length && (supplier = receiver, receiver = this);
-        return adopt(receiver, supplier, keys(supplier));
+        1 === arguments.length && (from = to, to = this);
+        return adopt(to, from, keys(from));
     }
     
     /**
