@@ -1,27 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <meta charset="utf-8">
-    <link rel="dns-prefetch" href="//airve.com">
-    <title>blood: test suite</title>
-    <meta name=viewport content="width=device-width,initial-scale=1.0">
-    <meta name=description content="JavaScript tests for blood.js">
-    <meta name=author content="Ryan Van Etten">
+    <title>Tests</title>
     <style>
-        html { font-family:sans-serif; background:#f8f8f8; color:#222; }
-        body { width:96%; margin:auto; }
+        html { font-family:sans-serif; background:#efefef; color:#111 }
+        body { width:96%; margin:auto; font-size:1em; line-height:1.6 }
+        pre, code, kbd { font-family:monospace; -moz-tab-size:4; -o-tab-size:4; tab-size:4 }
+        h3 b { font-weight:700 }
+        h3, pre b { font-weight:400 }
+        pre { padding:0 .5em; white-space:pre-line }
+        pre span { white-space:pre-wrap }
+        pre b { color:#008080 }
+        pre small { font-size:inherit; font-family:inherit; font-weight:lighter; color:#707070 }
+        kbd { display:inline-block; padding:.2em }
+        pre kbd { padding:0 }
     </style>
 </head>
 <body>
-    <h1>
-        <a href="http://github.com/ryanve/blood">blood</a>: test suite
-    </h1>
-    <div>
-        <p>Open the console to view results.</p>
-    </div>
-
+    <h1>Tests</h1>
+    <h3><b>Browser:</b> Check tests in the console.</h3>
+    <h3><b>CLI:</b> Run these commands:</h3>
+    <pre>
+        <span><b>$</b> <kbd>cd</kbd> <a href="../">aok</a>       <small># Go to the package root.</small></span>
+        <span><b>$</b> <kbd>npm install</kbd>  <small># Install dependencies.</small></span>
+        <span><b>$</b> <kbd>grunt aok</kbd>    <small># Run tests.</small></span>
+    </pre>
+    <script src="../src/index.js"></script>
     <script src="../node_modules/aok/aok.min.js"></script>
-    <script src="../blood.js"></script>
-    <script src="tests.js"></script>
+    <script src="./index.js"></script>
 </body>
 </html>
