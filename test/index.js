@@ -1,6 +1,6 @@
-(function(root) {
-    var aok = root.aok
-      , blood = root.blood
+!function(root) {
+    var aok = root ? root.aok : require('../node_modules/aok')
+      , blood = root ? root.blood : require('../src')
       , OP = Object.prototype;
     
     /*function testList(method, subject) {
@@ -98,4 +98,4 @@
             }, {a:1, b:1, c:1});
         }
     });
-}(this));
+}(typeof module != 'undefined' && module.exports ? null : this);
