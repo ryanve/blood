@@ -23,25 +23,25 @@
         })
     });
     aok({
-        id: 'arrProps'
+        id: 'names-array'
       , test: function() {
-            var arr = blood.props([]);
+            var arr = blood.names([]);
             this.remark = 'length: ' + arr.length;
             return arr.length;
         }
     });
     aok({
-        id: 'objProps'
+        id: 'names-plain'
       , test: function() {
-            var arr = blood.props({'length':1}), msg = ' (length: ' + arr.length  + ')';
+            var arr = blood.names({'length':1}), msg = ' (length: ' + arr.length  + ')';
             this.fail += msg;
             this.pass += msg;
             return arr.length;
         }
     });
     aok({
-        id: 'funProps', test: function() {
-            var arr = blood.props(isFinite), msg = ' (length: ' + arr.length  + ')';
+        id: 'names-func', test: function() {
+            var arr = blood.names(isFinite), msg = ' (length: ' + arr.length  + ')';
             this.fail += msg;
             this.pass += msg;
             return arr.length;
