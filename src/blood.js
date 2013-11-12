@@ -374,10 +374,9 @@
      * @return {Array}
      */
     function map(stack, fn, scope) {
-        var r = [];
-        return some(stack, function(v, i, stack) {
-            r[i] = fn.call(scope, v, i, stack);
-        }), r;
+        var r = [], l = stack.length, i = 0;
+        while (i < l) r[i] = fn.call(scope, stack[i], i++, stack);
+        return r;
     }
     
     /**
