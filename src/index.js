@@ -246,10 +246,9 @@
      * @return {Array}
      */
     function pluck(stack, key) {
-        var r = [];
-        return some(stack, function(v, k) {
-            r[k] = v[key];
-        }), r;
+        return map(stack, function(v) {
+            return v[key];
+        });
     }
 
     /**
