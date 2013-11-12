@@ -1,13 +1,31 @@
 module.exports = function(grunt) {
+    var _ = grunt.util._
+      , pkg = grunt.file.readJSON('package.json')
+      , path = require('path')
+      , from = 'src/'
+      , main = pkg.main && path.basename(pkg.main) || 'index.js'
+      , source = [_.find([from + 'index.js', from + main, from + pkg.name], function(v) {
+            return this.existsSync(v);
+        }, require('fs'))];
+
     grunt.initConfig({
-        pkg: grunt.file.readJSON('package.json'),
+        pkg: pkg,
+        aok: { test: ['./test'] },
         jshint: {
-            beforeconcat: ['src/', 'test/', 'GruntFile.js'],
-            afterconcat: ['<%= pkg.name %>.js'],
+            // gruntjs.com/configuring-tasks#globbing-patterns
+            // **/** matches in current and sub dirs
+            all: ['./'], // current dir and sub dirs
+            sub: ['*/'], // sub dirs
+            dir: ['*.js'], // current dir
+            src: ['src/'],
+            test: ['test/'],
+            grunt: [path.basename(__filename)],
+            build: [main],
             options: {
-                expr:true, sub:true, supernew:true, debug:true, node:true, 
-                boss:true, devel:true, evil:true, laxcomma:true, eqnull:true, 
-                undef:true, unused:true, browser:true, jquery:true, maxerr:10
+                ignores: ['**/**/node_modules/', '**/**/vendor/', '**/**.min.js'],
+                debug:true, expr:true, sub:true, boss:true, supernew:true, node:true, 
+                undef:true, unused:true, devel:true, evil:true, laxcomma:true, eqnull:true, 
+                browser:true, globals:{ender:true, define:true}, jquery:true, maxerr:10
             }
         },
         concat: {
@@ -21,9 +39,7 @@ module.exports = function(grunt) {
                 ].join('\n')
             },
             build: {
-                files: {
-                    '<%= pkg.name %>.js': ['src/<%= pkg.name %>.js']
-                }
+                files: _.object([main], [source])
             }
         },
         uglify: {
@@ -32,14 +48,14 @@ module.exports = function(grunt) {
                 preserveComments: 'some'
             },
             build: {
-                files: {
-                    '<%= pkg.name %>.min.js': ['<%= pkg.name %>.js']
-                }
+                files: _.object([main.replace(/\.js$/i, '.min.js')], [main])
             }
         }
     });
+
+    grunt.loadNpmTasks('aok');
     grunt.loadNpmTasks('grunt-contrib-jshint');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
-    grunt.registerTask('default', ['jshint:beforeconcat', 'concat', 'jshint:afterconcat', 'uglify']);
+    grunt.registerTask('default', ['jshint:grunt', 'jshint:sub', 'concat', 'jshint:build', 'uglify']);
 };
