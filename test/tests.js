@@ -69,10 +69,10 @@
     aok({
         id: 'collect'
       , test: function() {
-            var list = {0:0, 1:1, 2:2, 3:3, 4:4};
-            return '11111' === blood.collect(list, function(n, i, o) {
-                return this === list && o === list && n == i ? 1 : 0;
-            }, list).join('');
+            var list = {a:0, b:1, c:2, d:3, e:4};
+            return isFinite(blood.collect(list, function(n, k, o) {
+                return this === list && o === list && o[k] === n ? 1 : 0;
+            }, list).join(''));
         }
     });
     aok({

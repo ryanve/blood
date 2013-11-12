@@ -375,22 +375,21 @@
      */
     function map(stack, fn, scope) {
         var r = [];
-        return some(stack, function(v, k, stack) {
-            r[k] = fn.call(scope, v, k, stack);
+        return some(stack, function(v, i, stack) {
+            r[i] = fn.call(scope, v, i, stack);
         }), r;
     }
     
     /**
-     * @param {*} ob
+     * @param {Object} ob
      * @param {Function} fn
      * @param {*=} scope
      * @return {Array}
      */
     function collect(ob, fn, scope) {
-        var r = [];
-        return any(ob, function(v, k, ob) {
-            r[k] = fn.call(scope, v, k, ob);
-        }), r;
+        return map(keys(ob), function(k) {
+            return fn.call(scope, ob[k], k, ob);
+        });
     }
 
     /**
