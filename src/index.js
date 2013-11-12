@@ -300,8 +300,8 @@
     /**
      * @param {{length:number}} keys
      * @param {{length:number}} values
-     * @param {*=} target
-     * @return {Object|*}
+     * @param {Object=} target
+     * @return {Object}
      */
     function combine(keys, values, target) {
         return some(keys, values ? function(n, i) {
