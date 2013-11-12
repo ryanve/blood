@@ -76,10 +76,11 @@
              * @link http://github.com/kriskowal/es5-shim/pull/132
              * @link http://github.com/kriskowal/es5-shim/issues/150
              * @link http://github.com/kriskowal/es5-shim/pull/118
-             * @param {Object|Array|Function|null}  parent
+             * @param {Object|null}  parent
              * @return {Object}
              */
             return function(parent) {
+                /** @constructor */
                 function F() {}
                 F.prototype = null === parent ? emptyProto : parent;
                 var instance = new F; // inherits F.prototype
@@ -98,8 +99,8 @@
         };
 
     /**
-     * @param {Object|Array|Function} receiver
-     * @param {(Object|Array|Function)=} supplier
+     * @param {Object} receiver
+     * @param {Object=} supplier
      * @param {(Array|string|number|boolean)=} list
      */
     function adopt(receiver, supplier, list) {
@@ -114,8 +115,8 @@
     }
 
     /**
-     * @param {Object|Array|Function} receiver
-     * @param {Object|Array|Function} supplier
+     * @param {Object} receiver
+     * @param {Object} supplier
      */
     function assign(receiver, supplier) {
         // Functionally like the ES6 Object.assign expectation, plus single-param syntax
@@ -124,7 +125,7 @@
     }
     
     /**
-     * @param {Object|Array|Function} ob
+     * @param {Object} ob
      * @param {Object|null} pro
      */
     function line(ob, pro) {
@@ -140,7 +141,7 @@
     }
 
     /**
-     * @param {Object|Array|Function|null} source
+     * @param {(Object|null)=} source
      * @param {(Object|null)=} parent
      */
     function twin(source, parent) {
@@ -149,31 +150,27 @@
         parent = 2 == n ? parent : getPro(source);
         return adopt(create(parent), source, props(source));
     }
-
+    
     /**
-     * @param {Object|Function} ob
-     * @param {Function=} fn
-     * @param {*=} scope
+     * @param {Object} ob
+     * @return {Array}
      */
-    function all(ob, fn, scope) {
-        var list = keys(ob), l = list.length, i = 0;
-        while (i < l) if (!fn.call(scope, ob[list[i]], list[i++], ob)) return false;
-        return true;
+    function tree(ob) {
+        var chain = [ob];
+        while (null != (ob = getPro(ob))) chain.push(ob);
+        return chain;
     }
     
     /**
-     * @param {Object|Function} ob
-     * @param {Function=} fn
-     * @param {*=} scope
+     * @param {Object} ob
+     * @return {Array}
      */
-    function any(ob, fn, scope) {
-        var list = keys(ob), l = list.length, i = 0;
-        while (i < l) if (fn.call(scope, ob[list[i]], list[i++], ob)) return true;
-        return false;
+    function roots(ob) {
+        return tree(ob).slice(1);
     }
     
     /**
-     * @param {Object|Array} stack
+     * @param {{length:number}} stack
      * @param {Function=} fn
      * @param {*=} scope
      */
@@ -184,7 +181,18 @@
     }
     
     /**
-     * @param {Object|Array} stack
+     * @param {Object} ob
+     * @param {Function=} fn
+     * @param {*=} scope
+     */
+    function all(ob, fn, scope) {
+        var list = keys(ob), l = list.length, i = 0;
+        while (i < l) if (!fn.call(scope, ob[list[i]], list[i++], ob)) return false;
+        return true;
+    }
+    
+    /**
+     * @param {{length:number}} stack
      * @param {Function=} fn
      * @param {*=} scope
      */
@@ -195,7 +203,18 @@
     }
     
     /**
-     * @param {Object|Array|Arguments} stack
+     * @param {Object} ob
+     * @param {Function=} fn
+     * @param {*=} scope
+     */
+    function any(ob, fn, scope) {
+        var list = keys(ob), l = list.length, i = 0;
+        while (i < l) if (fn.call(scope, ob[list[i]], list[i++], ob)) return true;
+        return false;
+    }
+    
+    /**
+     * @param {{length:number}} stack
      * @param {Function} accum
      * @param {*=} value
      * @param {*=} scope
@@ -208,7 +227,7 @@
     }
     
     /**
-     * @param {Object|Function} ob
+     * @param {Object} ob
      * @param {Function} accum
      * @param {*=} value
      * @param {*=} scope
@@ -221,154 +240,7 @@
     }
     
     /**
-     * @param {Object|Function|Array} ob
-     * @return {Array}
-     */
-    function tree(ob) {
-        var chain = [ob];
-        while (null != (ob = getPro(ob))) chain.push(ob);
-        return chain;
-    }
-    
-    /**
-     * @param {Object|Function|Array} ob
-     * @return {Array}
-     */
-    function roots(ob) {
-        return tree(ob).slice(1);
-    }
-
-    /**
-     * @param {Array|Object} stack
-     * @param {*=} value
-     * @return {Array|Object}
-     */
-    function admit(stack, value) {
-        ~indexOf.call(stack, value) || push.call(stack, value);
-        return stack;
-    }
-    
-    /**
-     * @param {Array|Object} stack
-     * @return {Array}
-     */
-    function uniq(stack) {
-        return reduce(stack, admit, []);
-    }
-
-    /**
-     * @param {*} ob
-     * @return {number}
-     */
-    function size(ob) {
-        return null == ob ? 0 : (ob.length === +ob.length ? ob : keys(ob)).length; 
-    }
-
-    /**
-     * @param {Object|Array|Function} ob
-     * @return {Array}
-     */
-    function values(ob) {
-        var list = keys(ob), i = list.length;
-        while (i--) list[i] = ob[list[i]];
-        return list;
-    }
-    
-    /**
-     * @param {Object|Array|Function} ob
-     * @return {Array}
-     */
-    function pairs(ob) {
-        var list = keys(ob), i = list.length;
-        while (i--) list[i] = [list[i], ob[list[i]]];
-        return list;
-    }
-    
-    /**
-     * @param {Object|Array|Arguments} keys
-     * @param {Object|Array|Arguments} values
-     * @param {*=} target
-     * @return {Object|*}
-     */
-    function combine(keys, values, target) {
-        return some(keys, values ? function(n, i) {
-            this[n] = values[i];
-        } : function(pair) {
-            this[pair[0]] = pair[1];
-        }, target = target || {}), target;
-    }
-    
-    /**
-     * @param {Object|Array|Arguments} ob
-     * @return {Object}
-     */
-    function invert(ob) {
-        return combine(values(ob), keys(ob));
-    }
-
-    /**
-     * @param {number} max
-     * @param {Array|Object} o
-     * @return {number}
-     */
-    function longer(max, o) {
-        var i = o.length >> 0;
-        return i > max ? i : max;
-    }
-    
-    /**
-     * like underscorejs.org/#zip
-     * @param {...}
-     * @return {Array}
-     */
-    function zip() {
-        var r = [], i = reduce(arguments, longer, 0);
-        while (i--) r[i] = pluck(arguments, i);
-        return r;
-    }
-
-    /**
-     * @param {Object|Array|Function} ob
-     * @param {string|Array type
-     * @return {Array}
-     */
-    function types(ob, type) {
-        var names = keys(ob), i = names.length;
-        type = typeof type != 'object' ? [type] : type;
-        while (i--) ~indexOf.call(type, typeof ob[names[i]]) || names.splice(i, 1);
-        return names.sort();
-    }
-    
-    /**
-     * @param {Object|Array|Function} ob
-     * @return {Array}
-     */
-    function methods(ob) {
-        return types(ob, 'function');
-    }
-
-    /**
-     * @param {Object|Array|Function} source
-     * @return {Object}
-     */
-    function pick(source) {
-        for (var r = {}, list = concat.apply(AP, slice.call(arguments, 1)), l = list.length, i = 0; i < l; i++)
-            if (list[i] in source) r[list[i]] = source[list[i]];
-        return r;
-    }
-
-    /**
-     * @param {Object|Array|Function} source
-     * @return {Object}
-     */
-    function omit(source) {
-        var k, r = {}, list = concat.apply(AP, slice.call(arguments, 1));
-        for (k in source) ~indexOf.call(list, k) || (r[k] = source[k]);
-        return r;
-    }
-    
-    /**
-     * @param {*} stack
+     * @param {{length:number}} stack
      * @param {Function} fn
      * @param {*=} scope
      * @return {Array}
@@ -392,7 +264,7 @@
     }
 
     /**
-     * @param {*} stack
+     * @param {{length:number}} stack
      * @param {string|number} key
      * @return {Array}
      */
@@ -404,7 +276,136 @@
     }
 
     /**
-     * @param {Object|Array} ob
+     * @param {{length:number}} stack
+     * @param {*=} value
+     * @return {{length:number}}
+     */
+    function admit(stack, value) {
+        ~indexOf.call(stack, value) || push.call(stack, value);
+        return stack;
+    }
+    
+    /**
+     * @param {{length:number}} stack
+     * @return {Array}
+     */
+    function uniq(stack) {
+        return reduce(stack, admit, []);
+    }
+
+    /**
+     * @param {*} ob
+     * @return {number}
+     */
+    function size(ob) {
+        return null == ob ? 0 : (ob.length === +ob.length ? ob : keys(ob)).length; 
+    }
+
+    /**
+     * @param {Object} ob
+     * @return {Array}
+     */
+    function values(ob) {
+        var list = keys(ob), i = list.length;
+        while (i--) list[i] = ob[list[i]];
+        return list;
+    }
+    
+    /**
+     * @param {Object} ob
+     * @return {Array}
+     */
+    function pairs(ob) {
+        var list = keys(ob), i = list.length;
+        while (i--) list[i] = [list[i], ob[list[i]]];
+        return list;
+    }
+    
+    /**
+     * @param {{length:number}} keys
+     * @param {{length:number}} values
+     * @param {*=} target
+     * @return {Object|*}
+     */
+    function combine(keys, values, target) {
+        return some(keys, values ? function(n, i) {
+            this[n] = values[i];
+        } : function(pair) {
+            this[pair[0]] = pair[1];
+        }, target = target || {}), target;
+    }
+
+    /**
+     * @param {Object} ob
+     * @return {Object}
+     */
+    function invert(ob) {
+        return combine(values(ob), keys(ob));
+    }
+
+    /**
+     * @param {number} max
+     * @param {{length:number}} stack
+     * @return {number}
+     */
+    function longer(max, stack) {
+        var i = stack.length >> 0;
+        return i > max ? i : max;
+    }
+    
+    /**
+     * like underscorejs.org/#zip
+     * @param {...}
+     * @return {Array}
+     */
+    function zip() {
+        var r = [], i = reduce(arguments, longer, 0);
+        while (i--) r[i] = pluck(arguments, i);
+        return r;
+    }
+
+    /**
+     * @param {Object} ob
+     * @param {string|Array} type
+     * @return {Array}
+     */
+    function types(ob, type) {
+        var names = keys(ob), i = names.length;
+        type = typeof type != 'object' ? [type] : type;
+        while (i--) ~indexOf.call(type, typeof ob[names[i]]) || names.splice(i, 1);
+        return names.sort();
+    }
+    
+    /**
+     * @param {Object} ob
+     * @return {Array}
+     */
+    function methods(ob) {
+        return types(ob, 'function');
+    }
+
+    /**
+     * @param {Object} source
+     * @return {Object}
+     */
+    function pick(source) {
+        for (var r = {}, list = concat.apply(AP, slice.call(arguments, 1)), l = list.length, i = 0; i < l; i++)
+            if (list[i] in source) r[list[i]] = source[list[i]];
+        return r;
+    }
+
+    /**
+     * @param {Object} source
+     * @return {Object}
+     */
+    function omit(source) {
+        var k, r = {}, list = concat.apply(AP, slice.call(arguments, 1));
+        for (k in source) ~indexOf.call(list, k) || (r[k] = source[k]);
+        return r;
+    }
+
+    /**
+     * @param {Object} ob
      * @param {*} needle
      * @return {boolean}
      */
