@@ -1,7 +1,7 @@
 {
     "name": "blood",
     "description": "object inheritance and iteration utilities",
-    "version": "0.6.0",
+    "version": "0.6.1",
     "homepage": "https://github.com/ryanve/blood",
     "license": "MIT",
     "author": "Ryan Van Etten",
@@ -17,6 +17,6 @@
         "grunt-contrib-uglify": "~0.2.4",
         "grunt-contrib-concat": "~0.3.0",
         "grunt-contrib-jshint": "~0.6.4",
-        "aok": "~1.1"
+        "aok": "~1.7.0"
     }
 }
