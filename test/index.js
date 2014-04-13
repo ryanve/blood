@@ -3,15 +3,19 @@
   var aok = common ? require('aok') : root.aok;
   var api = common ? require('../src') : root[name];
   var OP = Object.prototype;
-  
-  /*function testList(method, subject) {
-    var arr = method(subject), msg = ' (length: ' + arr.length  + ')';
-    this.fail += msg;
-    this.pass += msg;
-    return arr.length;
-  }*/
+  if (typeof aok.prototype.fail == 'string') aok.prototype.fail = 'FAIL';
+  aok.prototype.express = aok.info; // uses alert in IE8
 
-  aok.prototype.express = aok.info;
+  /**
+   * @this {{pass:*, fail:*}} aok instance
+   * @param {string} key either "pass" or "fail"
+   * @param {string} msg message to append
+   */
+  aok.prototype.comment = function(key, msg) {
+    if (!(this instanceof aok)) throw new TypeError('@this');
+    if (typeof this[key] == 'string') this[key] += ' (' + msg + ')';
+  };
+
   aok({
     id: 'keys',
     test: 'a' === api.keys({a:1}).pop() && 0 === api.keys(OP).length
@@ -37,9 +41,9 @@
   aok({
     id: 'names-plain',
     test: function() {
-      var arr = api.names({'length':1}), msg = ' (length: ' + arr.length  + ')';
-      this.fail += msg;
-      this.pass += msg;
+      var arr = api.names({'length':1}), msg = '.length: ' + arr.length;
+      this.comment('pass', msg);
+      this.comment('fail', msg);
       return arr.length;
     }
   });
@@ -47,9 +51,9 @@
   aok({
     id: 'names-func',
     test: function() {
-      var arr = api.names(isFinite), msg = ' (length: ' + arr.length  + ')';
-      this.fail += msg;
-      this.pass += msg;
+      var arr = api.names(isFinite), msg = '.length: ' + arr.length;
+      this.comment('pass', msg);
+      this.comment('fail', msg);
       return arr.length;
     }
   });
