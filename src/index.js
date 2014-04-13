@@ -88,7 +88,7 @@
       }(combine([proto].concat(dontEnums), [null])))
 
     , getPro = Object.getPrototypeOf || function(o) {
-        return void 0 !== o[proto] ? o[proto] : (o.constructor || Object).prototype; 
+        return void 0 !== o[proto] ? o[proto] : (o.constructor || Object).prototype;
       }
 
     , setPro = function(o, pro) {
@@ -275,7 +275,7 @@
    * @return {number}
    */
   function size(o) {
-    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length; 
+    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length;
   }
 
   /**
@@ -398,7 +398,7 @@
    */
   function same(a, b) {
     // Emulate ES6 Object.is - Fixes NaN and discerns -0 from 0
-    return a === b ? (0 !== a || 1/a === 1/b) : a !== a && b !== b; 
+    return a === b ? (0 !== a || 1/a === 1/b) : a !== a && b !== b;
   }
 
   return {
