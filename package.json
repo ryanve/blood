@@ -6,17 +6,48 @@
   "license": "MIT",
   "author": "Ryan Van Etten",
   "keywords": ["functional", "util", "object", "inheritance", "iteration", "ender"],
-  "main": "./blood.js",
+  "main": "blood.js",
   "ender": "noop",
   "repository": {
     "type": "git",
     "url": "https://github.com/ryanve/blood.git"
   },
+  "dependencies": {},
+  "optionalDependencies": {},
   "devDependencies": {
-    "grunt": "~0.4.1",
-    "grunt-contrib-uglify": "~0.2.4",
+    "aok": "~1.8.1",
+    "universal": "0.1.0",
+    "grunt-contrib-uglify": "~0.4.0",
     "grunt-contrib-concat": "~0.3.0",
-    "grunt-contrib-jshint": "~0.6.4",
-    "aok": "~1.7.0"
+    "grunt-contrib-jshint": "~0.9.0"
+  },
+  "jshintConfig": {
+    "asi": false,
+    "boss": true,
+    "browser": true,
+    "debug": true,
+    "devel": true,
+    "eqnull": true,
+    "evil": true,
+    "expr": true,
+    "globals": {
+      "define": true,
+      "ender": true 
+    },
+    "jquery": true,
+    "lastsemic": true,
+    "latedef": "nofunc",
+    "laxcomma": true,
+    "maxcomplexity": 15,
+    "maxerr": 10,
+    "maxlen": 115,
+    "maxparams": 4,
+    "node": true,
+    "sub": true,
+    "supernew": true,
+    "trailing": true,
+    "undef": true,
+    "unused": true,
+    "worker": true
   }
 }
