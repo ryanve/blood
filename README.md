@@ -1,4 +1,4 @@
-# [blood](../../)
+# blood
 #### cross-compatible JavaScript object utility [module](https://npmjs.org/package/blood) with methods for inheritance and basic tasks like iteration
 
 ```sh
@@ -62,6 +62,6 @@ $ grunt aok
 
 Fund development with [tips to @ryanve](https://www.gittip.com/ryanve/) <b>=)</b>
 
-## License: [MIT](http://en.wikipedia.org/wiki/MIT_License)
+## License
 
-Copyright (C) 2013 by [Ryan Van Etten](https://github.com/ryanve)
+MIT
