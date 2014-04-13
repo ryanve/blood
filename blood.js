@@ -1,10 +1,9 @@
 /*!
- * blood 0.7.0+201404132122
+ * blood 0.7.1+201404132320
  * https://github.com/ryanve/blood
- * MIT License 2014 Ryan Van Etten
+ * MIT License (c) 2014 Ryan Van Etten
  */
-
-(function(root, name, make) {
+!function(root, name, make) {
   if (typeof module != 'undefined' && module['exports']) module['exports'] = make();
   else root[name] = make();
 }(this, 'blood', function() {
@@ -94,7 +93,7 @@
       }(combine([proto].concat(dontEnums), [null])))
 
     , getPro = Object.getPrototypeOf || function(o) {
-        return void 0 !== o[proto] ? o[proto] : (o.constructor || Object).prototype; 
+        return void 0 !== o[proto] ? o[proto] : (o.constructor || Object).prototype;
       }
 
     , setPro = function(o, pro) {
@@ -281,7 +280,7 @@
    * @return {number}
    */
   function size(o) {
-    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length; 
+    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length;
   }
 
   /**
@@ -404,7 +403,7 @@
    */
   function same(a, b) {
     // Emulate ES6 Object.is - Fixes NaN and discerns -0 from 0
-    return a === b ? (0 !== a || 1/a === 1/b) : a !== a && b !== b; 
+    return a === b ? (0 !== a || 1/a === 1/b) : a !== a && b !== b;
   }
 
   return {
@@ -444,4 +443,4 @@
     'values': values,
     'zip': zip
   };
-}));
+});
