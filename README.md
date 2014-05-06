@@ -1,11 +1,11 @@
 # blood
-#### cross-compatible JavaScript object utility [module](https://npmjs.org/package/blood) with methods for inheritance and basic tasks like iteration
+#### cross-platform JavaScript object utility [module](https://npmjs.org/package/blood) with methods for inheritance and iteration
 
 ```sh
 $ npm install blood
 ```
 
-## API ([0.7](../../releases))
+## API ([0.8](../../releases))
 
 - Interoperables: Methods are generally compatible with those in [underscore](http://underscorejs.org) and [lodash](http://lodash.com). Interchange libs based on needs. 
 - Parameters labelled with `?` are optional. 
@@ -32,7 +32,7 @@ $ npm install blood
 - `blood.adopt(supplier)` `this` receives
 - `blood.adopt(receiver, supplier, list)` assign *listed* keys
 
-### Iteration
+### [@deprecated](../../issues/2) Iteration
 
 #### `accum` callbacks receive `(result, value, key, object)`
 
@@ -53,9 +53,9 @@ $ npm install blood
 #### <b>Contribute</b> by making edits in [`/src`](./src) or reporting [issues](../../issues).
 
 ```sh
-$ npm install
-$ grunt jshint:sub
-$ grunt aok
+$ npm install -g grunt-cli # install grunt-cli if you haven't already
+$ npm install # install devDependencies from package.json
+$ grunt test # run tests
 ```
 
 ## Fund
