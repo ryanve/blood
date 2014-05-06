@@ -261,22 +261,6 @@
     ~indexOf.call(stack, value) || push.call(stack, value);
     return stack;
   }
-  
-  /**
-   * @param {{length:number}} stack
-   * @return {Array}
-   */
-  function uniq(stack) {
-    return reduce(stack, admit, []);
-  }
-
-  /**
-   * @param {*} o
-   * @return {number}
-   */
-  function size(o) {
-    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length;
-  }
 
   /**
    * @param {Object} o
@@ -321,27 +305,6 @@
   }
 
   /**
-   * @param {number} max
-   * @param {{length:number}} stack
-   * @return {number}
-   */
-  function longer(max, stack) {
-    var i = stack.length >> 0;
-    return i > max ? i : max;
-  }
-  
-  /**
-   * like underscorejs.org/#zip
-   * @param {...}
-   * @return {Array}
-   */
-  function zip() {
-    var r = [], i = reduce(arguments, longer, 0);
-    while (i--) r[i] = pluck(arguments, i);
-    return r;
-  }
-
-  /**
    * @param {Object} o
    * @param {string|Array} type
    * @return {Array}
@@ -380,16 +343,6 @@
     for (k in from) ~indexOf.call(list, k) || (r[k] = from[k]);
     return r;
   }
-
-  /**
-   * @param {Object} o
-   * @param {*} needle
-   * @return {boolean}
-   */
-  function include(o, needle) {
-    // Emulate _.include (underscorejs.org/#contains)
-    return !!~indexOf.call(o.length === +o.length ? o : values(o), needle);
-  }
   
   /**
    * @param {*} a
@@ -410,7 +363,6 @@
     'collect': proxy(map),
     'every': every,
     'has': has,
-    'include': include,
     'inject': proxy(reduce, true),
     'invert': invert,
     'keys': keys,
@@ -433,9 +385,6 @@
     'types': types,
     'same': same,
     'some': some,
-    'size': size,
-    'uniq': uniq,
-    'values': values,
-    'zip': zip
+    'values': values
   };
 });
