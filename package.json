@@ -1,7 +1,7 @@
 {
   "name": "blood",
   "description": "object inheritance and iteration utilities",
-  "version": "0.7.1",
+  "version": "0.8.0",
   "homepage": "https://github.com/ryanve/blood",
   "license": "MIT",
   "author": "Ryan Van Etten",

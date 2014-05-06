@@ -1,21 +1,21 @@
 /*!
- * blood 0.7.1+201404132320
+ * blood 0.8.0+201405062157
  * https://github.com/ryanve/blood
  * MIT License (c) 2014 Ryan Van Etten
  */
 !function(root, name, make) {
-  if (typeof module != 'undefined' && module['exports']) module['exports'] = make();
+  if (typeof module != 'undefined' && module.exports) module.exports = make();
   else root[name] = make();
 }(this, 'blood', function() {
 
   var AP = Array.prototype
     , OP = Object.prototype
-    , hasOwn = OP['hasOwnProperty']
-    , loops = OP['propertyIsEnumerable']
-    , push = AP['push']
-    , slice = AP['slice']
-    , concat = AP['concat']
-    , indexOf = AP['indexOf'] || function(needle, i) {
+    , hasOwn = OP.hasOwnProperty
+    , loops = OP.propertyIsEnumerable
+    , push = AP.push
+    , slice = AP.slice
+    , concat = AP.concat
+    , indexOf = AP.indexOf || function(needle, i) {
         var l = this.length;
         for (i = 0 > (i >>= 0) ? l + i : i; i < l; i++)
           if (i in this && this[i] === needle) return i;
@@ -266,22 +266,6 @@
     ~indexOf.call(stack, value) || push.call(stack, value);
     return stack;
   }
-  
-  /**
-   * @param {{length:number}} stack
-   * @return {Array}
-   */
-  function uniq(stack) {
-    return reduce(stack, admit, []);
-  }
-
-  /**
-   * @param {*} o
-   * @return {number}
-   */
-  function size(o) {
-    return null == o ? 0 : (o.length === +o.length ? o : keys(o)).length;
-  }
 
   /**
    * @param {Object} o
@@ -326,27 +310,6 @@
   }
 
   /**
-   * @param {number} max
-   * @param {{length:number}} stack
-   * @return {number}
-   */
-  function longer(max, stack) {
-    var i = stack.length >> 0;
-    return i > max ? i : max;
-  }
-  
-  /**
-   * like underscorejs.org/#zip
-   * @param {...}
-   * @return {Array}
-   */
-  function zip() {
-    var r = [], i = reduce(arguments, longer, 0);
-    while (i--) r[i] = pluck(arguments, i);
-    return r;
-  }
-
-  /**
    * @param {Object} o
    * @param {string|Array} type
    * @return {Array}
@@ -385,16 +348,6 @@
     for (k in from) ~indexOf.call(list, k) || (r[k] = from[k]);
     return r;
   }
-
-  /**
-   * @param {Object} o
-   * @param {*} needle
-   * @return {boolean}
-   */
-  function include(o, needle) {
-    // Emulate _.include (underscorejs.org/#contains)
-    return !!~indexOf.call(o.length === +o.length ? o : values(o), needle);
-  }
   
   /**
    * @param {*} a
@@ -415,7 +368,6 @@
     'collect': proxy(map),
     'every': every,
     'has': has,
-    'include': include,
     'inject': proxy(reduce, true),
     'invert': invert,
     'keys': keys,
@@ -438,9 +390,6 @@
     'types': types,
     'same': same,
     'some': some,
-    'size': size,
-    'uniq': uniq,
-    'values': values,
-    'zip': zip
+    'values': values
   };
 });
