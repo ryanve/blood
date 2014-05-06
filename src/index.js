@@ -1,16 +1,16 @@
 !function(root, name, make) {
-  if (typeof module != 'undefined' && module['exports']) module['exports'] = make();
+  if (typeof module != 'undefined' && module.exports) module.exports = make();
   else root[name] = make();
 }(this, 'blood', function() {
 
   var AP = Array.prototype
     , OP = Object.prototype
-    , hasOwn = OP['hasOwnProperty']
-    , loops = OP['propertyIsEnumerable']
-    , push = AP['push']
-    , slice = AP['slice']
-    , concat = AP['concat']
-    , indexOf = AP['indexOf'] || function(needle, i) {
+    , hasOwn = OP.hasOwnProperty
+    , loops = OP.propertyIsEnumerable
+    , push = AP.push
+    , slice = AP.slice
+    , concat = AP.concat
+    , indexOf = AP.indexOf || function(needle, i) {
         var l = this.length;
         for (i = 0 > (i >>= 0) ? l + i : i; i < l; i++)
           if (i in this && this[i] === needle) return i;
