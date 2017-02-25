@@ -32,7 +32,7 @@ npm install blood --save
 - `blood.adopt(supplier)` `this` receives
 - `blood.adopt(receiver, supplier, list)` assign *listed* keys
 
-### [@deprecated](../../issues/2) Iteration
+### Iteration ([deprecated](../../issues/2))
 
 #### `accum` callbacks receive `(result, value, key, object)`
 
