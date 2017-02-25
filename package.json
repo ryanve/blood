@@ -28,6 +28,9 @@
     "type": "git",
     "url": "https://github.com/ryanve/blood.git"
   },
+  "bugs": {
+    "url": "https://github.com/ryanve/blood/issues"
+  },
   "dependencies": {},
   "devDependencies": {
     "aok": "^1.9.0",
