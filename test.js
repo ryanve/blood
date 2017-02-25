@@ -3,8 +3,10 @@
   var aok = common ? require('aok') : root.aok
   var api = common ? require('./') : root[name]
   var OP = Object.prototype
-  if (typeof aok.prototype.fail == 'string') aok.prototype.fail = 'FAIL'
   aok.prototype.express = aok.info // uses alert in IE8
+  aok.prototype.fail = function() {
+    throw new Error('FAILED TEST: ' +  this.id)
+  }
 
   /**
    * @this {{pass:*, fail:*}} aok instance
