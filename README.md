@@ -44,7 +44,7 @@ npm test
 ```
 
 ## Compatibility
-Works in Node.js and modern browsers (ES5+ except where noted otherwise)
+Works in Node.js and modern browsers (ES5+ except where noted ES6+)
 
 ## Fund
 [Fund opensource development](https://gratipay.com/~ryanve/) <b>=)</b>
