@@ -17,7 +17,7 @@ npm install blood --save
 - `blood.pair(pairs)` create object from pairs
 - `blood.invert(object)` create new object by inverting keys and values
 
-### Manipulation
+### Mutation
 
 - `blood.assign(to, ...from)` emulates ES6 `Object.assign`
 - `blood.adopt(...from)` assign to `this`
