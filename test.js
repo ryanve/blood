@@ -1,8 +1,9 @@
-!function(root, name) {
-  var common = typeof module != 'undefined' && !!module.exports
-  var aok = common ? require('aok') : root.aok
-  var api = common ? require('./') : root[name]
+!function() {
+  var api = require('./')
+  var aok = require('aok')
   var OP = Object.prototype
+  function noop() {}
+
   aok.prototype.express = aok.info // uses alert in IE8
   aok.prototype.fail = function() {
     throw new Error('FAILED TEST: ' +  this.id)
@@ -20,100 +21,109 @@
 
   aok({
     id: 'keys',
-    test: 'a' === api.keys({a:1}).pop() && 0 === api.keys(OP).length
+    test: 'a' === api.keys({a: 1}).pop()
+  })
+
+  aok({
+    id: 'values',
+    test: api.values([4, 7]).join('') === '47'
+  })
+
+  aok({
+    id: 'combine',
+    test: api.combine(['k'], ['v']).k === 'v'
+  })
+
+  aok({
+    id: 'child-alias',
+    test: api.child === api.create
+  })
+
+  aok({
+    id: 'parent-object',
+    test: api.parent({}) === Object.prototype
+  })
+
+  aok({
+    id: 'parent-function',
+    test: api.parent(noop) === Function.prototype
+  })
+
+  aok({
+    id: 'orphan',
+    test: api.parent(api.orphan()) === null
+  })
+
+  aok({
+    id: 'parents',
+    test: api.parents(noop).pop() === Object.prototype
+  })
+
+  aok({
+    id: 'chain',
+    test: api.chain(noop)[0] === noop
   })
 
   aok({
     id: 'create',
-    test: api.every([null, {a:1}], function(parent) {
+    test: [null, {a: 1}, function() {}].every(function(parent) {
       var child = api.create(parent)
-      return !!child && !api.keys(child).length && api.line(child) === parent
+      return !!child && !api.keys(child).length && api.parent(child) === parent
     })
   })
 
   aok({
     id: 'names-array',
+    test: api.names([]).length
+  })
+
+  aok({
+    id: 'names-stack',
+    test: api.names({length: 0}).length
+  })
+
+  aok({
+    id: 'names-function',
+    test: api.names(function() {}).length
+  })
+
+  aok({
+    id: 'invert',
+    test: api.invert({k: 'v'}).v === 'k'
+  })
+
+  aok({
+    id: 'assign',
     test: function() {
-      var arr = api.names([])
-      this.remark = 'length: ' + arr.length
-      return arr.length
+      var to = {a: 1}
+      if (to !== api.assign(to)) return false
+      api.assign(to, {b: 2, c: 3},  {d: 4}, {b: 5})
+      return to.a === 1 && to.b === 5 && to.c === 3 && to.d === 4
     }
   })
 
   aok({
-    id: 'names-plain',
+    id: 'adopt',
     test: function() {
-      var arr = api.names({'length':1}), msg = '.length: ' + arr.length
-      this.comment('pass', msg)
-      this.comment('fail', msg)
-      return arr.length
+      var to = {a: 1}
+      if (to !== api.adopt.call(to)) return false
+      api.adopt.call(to, {b: 2, c: 3}, {d: 4}, {b: 5})
+      return to.a === 1 && to.b === 5 && to.c === 3 && to.d === 4
     }
   })
 
   aok({
-    id: 'names-func',
+    id: 'chain',
     test: function() {
-      var arr = api.names(isFinite), msg = '.length: ' + arr.length
-      this.comment('pass', msg)
-      this.comment('fail', msg)
-      return arr.length
-    }
-  })
-
-  aok({
-    id: 'tree',
-    test: function() {
-      var r, a = {id:'a'}, b = api.create(a), c = api.create(b)
+      var a = {id: 'a'}
+      var b = api.create(a)
+      var c = api.create(b)
       b.id = 'b'
       c.id = 'c'
-      r = api.tree(c)
+      var r = api.chain(c)
       return 4 === r.length && c === r[0] && b === r[1] && a === r[2] && OP === r[3]
     }
   })
 
-  aok({
-    id: 'map',
-    test: function() {
-      var list = [0, 1, 2, 3, 4]
-      return '11111' === api.map(list, function(n, i, o) {
-        return this === list && o === list && n == i ? 1 : 0
-      }, list).join('')
-    }
-  })
-
-  aok({
-    id: 'collect',
-    test: function() {
-      var list = {a:0, b:1, c:2, d:3, e:4}
-      return isFinite(api.collect(list, function(n, k, o) {
-        return this === list && o === list && o[k] === n ? 1 : 0
-      }, list).join(''))
-    }
-  })
-
-  aok({
-    id: 'pluck',
-    test: function() {
-      var list = [{a:0, b:1}, {a:2, b:3}, {a:4, b:5}]
-      return '135' === api.pluck(list, 'b').join('')
-    }
-  })
-
-  aok({
-    id: 'pick',
-    test: function() {
-      return api.every([['b', 'a'], ['a'], [['a']]], function(arr) {
-        return api.pick.apply(api, arr.unshift(this) && arr).hasOwnProperty('a')
-      }, {a:1, b:1, c:1})
-    }
-  })
-
-  aok({
-    id: 'omit',
-    test: function() {
-      return api.every([['b', 'a'], ['a'], [['a']]], function(arr) {
-        return !api.omit.apply(api, arr.unshift(this) && arr).hasOwnProperty('a')
-      }, {a:1, b:1, c:1})
-    }
-  })
-}(this, 'blood');
+  console.log('All tests passed =)')
+}();
