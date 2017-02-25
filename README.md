@@ -7,9 +7,9 @@ $ npm install blood
 
 ## API ([0.8](../../releases))
 
-- Interoperables: Methods are generally compatible with those in [underscore](http://underscorejs.org) and [lodash](http://lodash.com). Interchange libs based on needs. 
-- Parameters labelled with `?` are optional. 
-- Read [annotations](http://developers.google.com/closure/compiler/docs/js-for-compiler) and comments in [the source](blood.js). 
+- Interoperables: Methods are generally compatible with those in [underscore](http://underscorejs.org) and [lodash](http://lodash.com). Interchange libs based on needs.
+- Parameters labelled with `?` are optional.
+- Read [annotations](http://developers.google.com/closure/compiler/docs/js-for-compiler) and comments in [the source](blood.js).
 
 ### Creation
 

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<meta charset="utf-8">
+<title>blood: JavaScript object life</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+::selection {
+  background: MediumBlue;
+  color: Pink;
+}
+
+:link,
+:visited {
+  text-decoration: none;
+  transition: 100ms;
+  transition-property: color, background-color, border-color, outline-color;
+  background: Pink;
+  color: Crimson;
+}
+
+:link:hover,
+:visited:hover {
+  background: MediumBlue;
+  border-color: Crimson;
+  color: Pink;
+}
+
+:focus {
+  outline-color: WhiteSmoke;
+}
+
+html {
+  background: Crimson;
+  color: Pink;
+  font: 1.125em/2 sans-serif;
+}
+
+body {
+  padding: 2em;
+  width: 100%;
+  margin: auto;
+  word-wrap: break-word;
+}
+
+code {
+  padding: .33em;
+  border-radius: .5em;
+  background: Pink;
+  color: Crimson;
+  margin: 0 .16em;
+}
+
+h1 {
+  margin-top: 0;
+  line-height: 1;
+}
+
+.button {
+  font-size: inherit;
+  font-style: inherit;
+  display: inline-block;
+  border-width: .5em;
+  border-style: solid;
+  border-radius: 30% 80% 80%;
+  padding: .5em;
+  margin: 0 0 1em;
+  cursor: pointer;
+  margin-right: .33em;
+  margin-bottom: 1em;
+}
+</style>
+
+<h1>blood</h1>
+<p>Try <code>blood</code> in the console</p>
+<a class="button" href="https://github.com/ryanve/blood">Github</a>
+<a class="button" href="https://www.npmjs.com/package/blood">npm</a>
+
+<script src="blood.js"></script>
+<script>
+typeof console == 'undefined' || !console.dir || console.dir(blood)
+</script>
