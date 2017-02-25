@@ -32,29 +32,5 @@
   "devDependencies": {
     "aok": "^1.9.0",
     "eslint": "^3.16.1"
-  },
-  "jshintConfig": {
-    "asi": false,
-    "boss": true,
-    "browser": true,
-    "debug": true,
-    "devel": true,
-    "eqnull": true,
-    "evil": true,
-    "expr": true,
-    "lastsemic": true,
-    "latedef": "nofunc",
-    "laxcomma": true,
-    "maxcomplexity": 15,
-    "maxerr": 10,
-    "maxlen": 115,
-    "maxparams": 4,
-    "node": true,
-    "sub": true,
-    "supernew": true,
-    "trailing": true,
-    "undef": true,
-    "unused": true,
-    "worker": true
   }
 }
