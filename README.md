@@ -1,11 +1,11 @@
 # blood
-#### cross-platform JavaScript object utility [module](https://npmjs.org/package/blood) with methods for inheritance and iteration
+#### cross-platform JavaScript object utility module with methods for inheritance and iteration
 
-```sh
-$ npm install blood
+```
+npm install blood --save
 ```
 
-## API ([0.8](../../releases))
+## API
 
 - Interoperables: Methods are generally compatible with those in [underscore](http://underscorejs.org) and [lodash](http://lodash.com). Interchange libs based on needs.
 - Parameters labelled with `?` are optional.
@@ -50,18 +50,13 @@ $ npm install blood
 
 ## Developers
 
-#### <b>Contribute</b> by making edits in [`/src`](./src) or reporting [issues](../../issues).
-
-```sh
-$ npm install -g grunt-cli # install grunt-cli if you haven't already
-$ npm install # install devDependencies from package.json
-$ grunt test # run tests
+```
+npm install
+npm test
 ```
 
 ## Fund
-
 Fund development with [tips to @ryanve](https://www.gittip.com/ryanve/) <b>=)</b>
 
 ## License
-
 MIT
