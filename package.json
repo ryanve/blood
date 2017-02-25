@@ -1,7 +1,7 @@
 {
   "name": "blood",
   "description": "JavaScript object life",
-  "version": "0.10.0",
+  "version": "0.10.1",
   "homepage": "https://github.com/ryanve/blood",
   "license": "MIT",
   "author": "Ryan Van Etten",
